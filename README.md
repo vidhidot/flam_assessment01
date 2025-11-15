@@ -1,8 +1,29 @@
-# Real-Time Collaborative Drawing Canvas
 
-This is a full-stack implementation of a real-time collaborative whiteboard application, built to demonstrate mastery of the HTML5 Canvas API, Vanilla TypeScript, Node.js, and advanced Socket.IO features for real-time synchronization.
+#  Real-Time Collaborative Drawing Canvas
 
-**Core Constraint:** All client-side drawing logic is implemented using **Vanilla TypeScript and the HTML5 Canvas API** (no React/Vue/etc. frameworks).
+This project is a browser-based collaborative drawing app where multiple people can draw together on the same canvas in real time. It’s built entirely using **vanilla JavaScript**, the **HTML5 Canvas API**, and **Node.js WebSockets**—no frontend frameworks or drawing libraries.
+
+The goal was to build something lightweight, fast, and easy to understand, while still handling the tricky parts of real-time sync, undo/redo across users, and smooth drawing performance.
+
+---
+
+##  What You Can Do in This App
+
+### Drawing Tools
+- Draw using a smooth freehand brush  
+- Erase strokes  
+- Change colors  
+- Adjust brush size  
+- Pixel-perfect path smoothing  
+
+### Real-Time Features
+- See other users’ drawings *as they happen*, not after they finish  
+- Live cursor indicators showing where each person is drawing  
+- Global undo/redo (affects everyone)  
+- Basic conflict handling when users draw in the same place  
+- Each user gets an auto-assigned color + is shown in an online users list
+
+
 
 ## Setup Instructions
 
