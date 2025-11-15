@@ -5,9 +5,9 @@ class CollaborativeDrawingApp {
     this.canvas = new CanvasManager("drawingCanvas");
     this.cursors = new CursorManager("cursors");
 
-    // Connect to WebSocket
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${protocol}//${window.location.host}`;
+    // Connect to WebSocket - supports both local and production
+    const wsUrl = this.getWebSocketUrl();
+    console.log("Connecting to WebSocket:", wsUrl);
     this.wsClient = new WebSocketClient(wsUrl);
     this.protocol = new DrawingProtocol(this.wsClient);
 
@@ -24,6 +24,24 @@ class CollaborativeDrawingApp {
     setInterval(() => {
       this.cursors.removeInactiveCursors();
     }, 5000);
+  }
+
+  getWebSocketUrl() {
+    const hostname = window.location.hostname;
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const port = window.location.port;
+
+    // For Render and same-domain deployments
+    if (hostname !== "localhost" && hostname !== "127.0.0.1") {
+      // Production - use same host as the webpage
+      const wsUrl = `${protocol}//${hostname}${port ? ":" + port : ""}`;
+      console.log("Production WebSocket URL:", wsUrl);
+      return wsUrl;
+    }
+
+    // Local development
+    console.log("Development WebSocket URL: ws://localhost:3000");
+    return "ws://localhost:3000";
   }
 
   setupUI() {

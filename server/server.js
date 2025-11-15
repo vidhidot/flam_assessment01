@@ -6,12 +6,29 @@ const DrawingState = require("./drawing-state");
 
 const app = express();
 const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+
+// WebSocket server configuration for Render
+const wss = new WebSocket.Server({
+  server,
+  // Important for Render deployment
+  perMessageDeflate: false,
+  clientTracking: true,
+});
 
 const PORT = process.env.PORT || 3000;
 
 // Serve static files from client directory
 app.use(express.static(path.join(__dirname, "../client")));
+
+// Health check endpoint (important for Render)
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
+// Root route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/index.html"));
+});
 
 // Drawing state manager
 const drawingState = new DrawingState();
@@ -230,22 +247,36 @@ function handleCursor(userId, data) {
 function handleUndo() {
   const result = drawingState.undo();
 
+  console.log(
+    "Undo requested, operations remaining:",
+    result.operations?.length || 0
+  );
+
   if (result.success) {
     broadcast({
       type: "undo",
       operations: result.operations,
     });
+  } else {
+    console.log("Undo failed:", result.message);
   }
 }
 
 function handleRedo() {
   const result = drawingState.redo();
 
+  console.log(
+    "Redo requested, operations after:",
+    result.operations?.length || 0
+  );
+
   if (result.success) {
     broadcast({
       type: "redo",
       operations: result.operations,
     });
+  } else {
+    console.log("Redo failed:", result.message);
   }
 }
 

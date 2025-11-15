@@ -6,6 +6,7 @@ class WebSocketClient {
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
     this.reconnectDelay = 3000;
+    this.isConnecting = false;
 
     // Event handlers
     this.handlers = {
@@ -19,11 +20,20 @@ class WebSocketClient {
   }
 
   connect() {
+    if (this.isConnecting) {
+      console.log("Already connecting, skipping...");
+      return;
+    }
+
+    this.isConnecting = true;
+
     try {
+      console.log("Attempting WebSocket connection to:", this.url);
       this.ws = new WebSocket(this.url);
       this.setupEventListeners();
     } catch (error) {
       console.error("WebSocket connection error:", error);
+      this.isConnecting = false;
       this.emit("error", error);
     }
   }
@@ -218,6 +228,7 @@ class DrawingProtocol {
 
   // Send methods
   sendDraw(drawData) {
+    console.log("Sending draw data:", drawData);
     this.ws.send({
       type: MessageTypes.DRAW,
       data: drawData,
