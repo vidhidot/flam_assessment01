@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Drawing Canvas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Collaborative Drawing Canvas</h1>
+            <div class="connection-status">
+                <span id="status" class="status disconnected">Disconnected</span>
+            </div>
+        </header>
+
+        <div class="toolbar">
+            <div class="tool-group">
+                <label>Tool:</label>
+                <button id="brushBtn" class="tool-btn active" data-tool="brush">✏️ Brush</button>
+                <button id="eraserBtn" class="tool-btn" data-tool="eraser">🧹 Eraser</button>
+            </div>
+
+            <div class="tool-group">
+                <label for="colorPicker">Color:</label>
+                <input type="color" id="colorPicker" value="#000000">
+            </div>
+
+            <div class="tool-group">
+                <label for="widthSlider">Width: <span id="widthValue">5</span>px</label>
+                <input type="range" id="widthSlider" min="1" max="50" value="5">
+            </div>
+
+            <div class="tool-group">
+                <button id="undoBtn" class="action-btn">↶ Undo</button>
+                <button id="redoBtn" class="action-btn">↷ Redo</button>
+                <button id="clearBtn" class="action-btn">🗑️ Clear</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="canvas-container">
+                <canvas id="drawingCanvas" width="800" height="600"></canvas>
+                <div id="cursors"></div>
+            </div>
+
+            <aside class="sidebar">
+                <h3>Online Users (<span id="userCount">0</span>)</h3>
+                <ul id="userList"></ul>
+            </aside>
+        </div>
+    </div>
+
+    <script src="canvas.js"></script>
+    <script src="websocket.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
